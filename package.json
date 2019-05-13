@@ -1,0 +1,10 @@
+{
+    "name": "spread-common",
+    "version": "0.0.1",
+    "description": "Spread common application",
+    "author": "David Levayer <david.levayer@gmail.com>",
+    "main": "index.js",
+    "dependencies": {
+        "amqplib": "^0.5.3"
+    }
+}
