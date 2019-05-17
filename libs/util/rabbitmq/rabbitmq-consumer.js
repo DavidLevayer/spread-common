@@ -2,21 +2,21 @@
 
 var amqp = require('amqplib/callback_api');
 
-const RabbitmqConsumerInfo = require("../../model/rabbitmq/rabbitmq-consumer-info");
+const RabbitmqInfo = require("../../model/rabbitmq/rabbitmq-info");
 const AbstractConsumer = require("../../core/consumer/abstract-consumer");
 
 class RabbitmqConsumer {
 
     /**
      * 
-     * @param {RabbitmqConsumerInfo} rabbitmqConsumerInfo 
+     * @param {RabbitmqInfo} rabbitmqInfo 
      */
-    constructor(rabbitmqConsumerInfo) {
-        this.rabbitmqConsumerInfo = rabbitmqConsumerInfo;
+    constructor(rabbitmqInfo) {
+        this.rabbitmqInfo = rabbitmqInfo;
 
-        amqp.connect(`amqp://${this.rabbitmqConsumerInfo.host}:${this.rabbitmqConsumerInfo.port}`, (err, connection) => {
+        amqp.connect(`amqp://${this.rabbitmqInfo.host}:${this.rabbitmqInfo.port}`, (err, connection) => {
             connection.createChannel((err, channel) => {
-                channel.assertExchange(this.rabbitmqConsumerInfo.exchangeName, 'topic', { durable: false });
+                channel.assertExchange(this.rabbitmqInfo.exchangeName, 'topic', { durable: false });
                 this.channel = channel;
             })
         });
@@ -32,7 +32,7 @@ class RabbitmqConsumer {
                 throw err;
             }                    
             abstractConsumer.bindings.forEach((binding) => {
-                this.channel.bindQueue(q.queue, this.rabbitmqConsumerInfo.exchangeName, binding);
+                this.channel.bindQueue(q.queue, this.rabbitmqInfo.exchangeName, binding);
             });
             this.channel.consume(q.queue, (message) => {
                 abstractConsumer.consume(message);

@@ -2,20 +2,20 @@
 
 var amqp = require('amqplib/callback_api');
 
-const RabbitmqProducerInfo = require("../../model/rabbitmq/rabbitmq-producer-info");
+const RabbitmqInfo = require("../../model/rabbitmq/rabbitmq-info");
 
 class RabbitmqProducer {
 
     /**
      * 
-     * @param {RabbitmqProducerInfo} rabbitmqProducerInfo 
+     * @param {RabbitmqInfo} rabbitmqInfo 
      */
-    constructor(rabbitmqProducerInfo) {
-        this.rabbitmqProducerInfo = rabbitmqProducerInfo;
+    constructor(rabbitmqInfo) {
+        this.rabbitmqInfo = rabbitmqInfo;
 
-        amqp.connect(`amqp://${this.rabbitmqProducerInfo.host}:${this.rabbitmqProducerInfo.port}`, (err, connection) => {
+        amqp.connect(`amqp://${this.rabbitmqInfo.host}:${this.rabbitmqInfo.port}`, (err, connection) => {
             connection.createChannel((err, channel) => {
-                channel.assertExchange(this.rabbitmqProducerInfo.exchangeName, 'topic', { durable: false });
+                channel.assertExchange(this.rabbitmqInfo.exchangeName, 'topic', { durable: false });
                 this.channel = channel;
             })
         });
@@ -27,7 +27,7 @@ class RabbitmqProducer {
      * @param {object} message 
      */
     send(routingKey, message) {
-        this.channel.publish(this.rabbitmqProducerInfo.exchangeName, routingKey, Buffer.from(JSON.stringify(message)));
+        this.channel.publish(this.rabbitmqInfo.exchangeName, routingKey, Buffer.from(JSON.stringify(message)));
     }
 }
 

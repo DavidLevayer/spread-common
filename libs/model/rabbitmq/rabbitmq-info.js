@@ -1,6 +1,6 @@
 'use strict';
 
-class RabbitmqConsumerInfo {
+class RabbitmqInfo {
 
     /**
      * 
@@ -8,11 +8,11 @@ class RabbitmqConsumerInfo {
      * @param {number} port 
      * @param {string} exchangeName
      */
-    constructor(host, port, exchangeName, queueName, bindings) {
+    constructor(host, port, exchangeName) {
         this.host = host;
         this.port = port;
         this.exchangeName = exchangeName;
     }
 }
 
-module.exports = RabbitmqConsumerInfo;
+module.exports = RabbitmqInfo;
